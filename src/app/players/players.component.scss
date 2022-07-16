@@ -1,0 +1,20 @@
+.form-input {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+
+    .button-wrapper {
+        padding-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+form {
+    margin-top: 2rem;
+}
+
+table {
+    width: 100%;    
+}

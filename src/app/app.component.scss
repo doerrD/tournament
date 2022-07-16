@@ -1,0 +1,12 @@
+.tournament {
+    display: flex;
+
+    .matches {
+        padding: 1rem;
+        flex: 1;
+    }
+
+    .players {
+        width: 400px;
+    }
+}

@@ -1,0 +1,61 @@
+<div style="margin-bottom: 1rem;">
+    <button mat-raised-button color="primary" (click)="calculateRandomMatches()">Randomize</button>
+</div>
+
+<mat-card *ngFor="let match of matches$ | async" style="margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem;">
+        <div>{{ match.round }}. Runde</div>
+        <div>
+            <button mat-icon-button (click)="match.isEditMode = true">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteMatch(match.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div style="display: flex; justify-content: space-between;   padding: 1rem 0;">
+        <div>
+            <label style="font-size: 0.8rem; color:gray;">Paarung 1</label><br />
+            {{ match.first.player1.name }} / {{ match.first.player2.name }}
+        </div>
+        <div style="text-align: center; position: absolute; width: 100%;">
+            <label style="font-size: 0.8rem; color:gray; ">Ergebnis</label><br />
+            <div *ngIf="!!match.firstPoints && !!match.secondPoints">
+                {{ match.firstPoints }} / {{ match.secondPoints }}
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <label style="font-size: 0.8rem; color:gray;">Paarung 2</label><br />
+            {{ match.second.player1.name }} / {{ match.second.player2.name }}
+        </div>
+    </div>
+    <mat-divider *ngIf="match.isEditMode"></mat-divider>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;" *ngIf="match.isEditMode">
+        <div style="display:flex;">
+            <div *ngFor="let p of points; let i = index">
+                <button mat-icon-button *ngIf="i !== match.firstPoints" (click)="match.firstPoints = i">
+                    {{ i }}
+                </button>
+                <button mat-mini-fab color="accent" *ngIf="(i) === match.firstPoints">
+                    {{ i }}
+                </button>
+            </div>
+        </div>
+        <div>
+            <button mat-raised-button color="primary" (click)="updateMatch(match)">Speichern</button>
+        </div>
+        
+        <div style="display:flex;">
+            <div *ngFor="let p of points; let i = index">
+                <button mat-icon-button *ngIf="i !== match.secondPoints" (click)="match.secondPoints = i">
+                    {{ i }}
+                </button>
+                <button mat-mini-fab color="accent" *ngIf="i === match.secondPoints">
+                    {{ i }}
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-card>
