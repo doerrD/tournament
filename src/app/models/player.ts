@@ -4,5 +4,6 @@ export interface Player {
 
 export interface PlayerWithStats extends Player {
     value: number;
+    matches: number;
     isActive: boolean;
 }

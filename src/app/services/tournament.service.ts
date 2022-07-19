@@ -50,6 +50,7 @@ export class TournamentService {
         {
           ...player,
           value: 0,
+          matches: 0,
           isActive: true
         }
       ]));
@@ -77,6 +78,8 @@ export class TournamentService {
       const random = new RandomNumberGenerator(activePlayers.length);
 
       const newMatches: Match[] = [];
+
+      const maxMatches = Math.trunc(activePlayers.length / 4);
       
       let next = random.next();
       while(next != null) {
@@ -118,12 +121,16 @@ export class TournamentService {
             round: this.currentRound
           });
         }
+
+        next = random.next();
       }
 
       this.matchSubject.next([
         ...this.matchSubject.value,
         ...newMatches
       ]);
+
+      this.updateStats();
     }
   }
 
@@ -164,8 +171,6 @@ export class TournamentService {
   }
 
   private getSortedPlayersList(players: PlayerWithStats[]) {
-    // const sortedPlayers = _.sortBy(players, ["value", "name"], ['desc', 'asc']);
-    // return sortedPlayers;
     players.sort((p1, p2) => {
       if (p1.value > p2.value) {
         return -1;
@@ -185,23 +190,28 @@ export class TournamentService {
 
   private updateStats() {
     const players = this.playersSubject.value;
-    players.forEach((p) => p.value = 0);
+    players.forEach((p) => {
+      p.matches = 0;
+      p.value = 0;
+    });
 
     const matches = this.matchSubject.value;
     matches.forEach((m) => {
-      if (!!m.firstPoints && !!m.secondPoints) {
-        const player1 = players.find(p => p.name === m.first.player1.name);
-        const player2 = players.find(p => p.name === m.first.player2.name);
+      const player1 = players.find(p => p.name === m.first.player1.name);
+      const player2 = players.find(p => p.name === m.first.player2.name);
+      const player3 = players.find(p => p.name === m.second.player1.name);
+      const player4 = players.find(p => p.name === m.second.player2.name);
 
-        if (player1 && player2) {
+      if (player1 && player2 && player3 && player4) {
+        player1.matches++;
+        player2.matches++;    
+        player3.matches++;
+        player4.matches++;
+
+        if (!!m.firstPoints && !!m.secondPoints) {
           player1.value += m.firstPoints;
           player2.value += m.firstPoints;
-        }
 
-        const player3 = players.find(p => p.name === m.second.player1.name);
-        const player4 = players.find(p => p.name === m.second.player2.name);
-
-        if (player3 && player4) {
           player3.value += m.secondPoints;
           player4.value += m.secondPoints;
         }

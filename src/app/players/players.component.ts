@@ -13,7 +13,7 @@ import { TournamentService } from '../services/tournament.service';
 export class PlayersComponent implements OnInit {
 
   public players$: Observable<PlayerWithStats[]> = this.tournamentService.players$;
-  public displayedColumns: string[] = ['isActive', 'name', 'value'];
+  public displayedColumns: string[] = ['isActive', 'name', 'matches', 'value'];
 
   public userForm: FormGroup;
 
